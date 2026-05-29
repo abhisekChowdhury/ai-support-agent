@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.models import Ticket, TicketCreate
+from backend.models import Ticket, TicketCreate, TicketStatus
+from backend.agent import process_ticket
 import uuid
 from datetime import datetime
 
@@ -23,12 +24,22 @@ def root():
 
 @app.post("/tickets")
 def create_ticket(data: TicketCreate):
+    # step 1 - create the ticket
     ticket = Ticket(
         id=str(uuid.uuid4()),
         customer_name=data.customer_name,
         issue=data.issue,
         created_at=str(datetime.now())
     )
+
+    # step 2 - process it through the AI agent
+    result = process_ticket(ticket.issue)
+
+    # step 3 - update ticket based on AI decision
+    ticket.response = result["response"]
+    ticket.status = TicketStatus.ESCALATED if result["escalated"] else TicketStatus.RESOLVED
+
+    # step 4 - store and return it
     tickets[ticket.id] = ticket
     return ticket
 
