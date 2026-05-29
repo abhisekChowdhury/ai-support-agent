@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div style={{ maxWidth: "600px", margin: "60px auto", fontFamily: "sans-serif", padding: "0 20px" }}>
-      <h1>🎧 AI Customer Support</h1>
+      <h1>AI Customer Support for E-Commerce</h1>
       <p style={{ color: "#666" }}>Describe your issue and our AI agent will help you instantly.</p>
 
       <div style={{ marginBottom: "16px" }}>
